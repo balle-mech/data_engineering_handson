@@ -1,9 +1,9 @@
 # Databricks notebook source
 # MAGIC %md
 # MAGIC # 演習1: PySparkによる命令型ETL（25分）
-# MAGIC 
+# MAGIC
 # MAGIC このノートブックでは、Part 1で学んだSparkの基礎を使って、命令型のETLパイプラインを構築します。
-# MAGIC 
+# MAGIC
 # MAGIC ## 学習目標
 # MAGIC - PySparkでデータを読み込み、変換し、保存する
 # MAGIC - Bronze → Silver → Gold のメダリオンアーキテクチャを実装する
@@ -40,7 +40,7 @@ print(f"✅ スキーマ {CATALOG}.{SCHEMA} を使用します")
 
 # MAGIC %md
 # MAGIC ## 1. ソースデータの確認
-# MAGIC 
+# MAGIC
 # MAGIC NYCタクシーのサンプルデータを使用します。
 
 # COMMAND ----------
@@ -61,7 +61,7 @@ display(source_df.limit(10))
 
 # MAGIC %md
 # MAGIC ## 2. Bronze層の作成
-# MAGIC 
+# MAGIC
 # MAGIC Bronze層では、ソースデータをそのまま取り込みます。
 # MAGIC 実際の業務では、ファイルやAPIから取り込んだ生データをここに保存します。
 
@@ -84,9 +84,9 @@ display(spark.table("bronze_trips").limit(5))
 
 # MAGIC %md
 # MAGIC ## 3. Silver層の作成
-# MAGIC 
+# MAGIC
 # MAGIC Silver層では、データのクレンジング（品質向上）を行います。
-# MAGIC 
+# MAGIC
 # MAGIC ### クレンジング内容
 # MAGIC - 不正なデータの除外（料金が0以下、距離が0以下）
 # MAGIC - 必要なカラムの選択
@@ -135,9 +135,9 @@ print(f"除外された件数: {bronze_count - silver_count:,} 件")
 
 # MAGIC %md
 # MAGIC ## 4. Gold層の作成
-# MAGIC 
+# MAGIC
 # MAGIC Gold層では、ビジネス向けの集計を行います。
-# MAGIC 
+# MAGIC
 # MAGIC ### 集計内容
 # MAGIC - 日別の乗車回数
 # MAGIC - 日別の総売上
@@ -177,11 +177,11 @@ display(spark.table("gold_daily_trips"))
 
 # MAGIC %md
 # MAGIC ## 5. カタログエクスプローラで確認
-# MAGIC 
+# MAGIC
 # MAGIC 作成したテーブルをカタログエクスプローラで確認しましょう。
-# MAGIC 
+# MAGIC
 # MAGIC ### 確認手順
-# MAGIC 
+# MAGIC
 # MAGIC 1. 左メニューから **Catalog**（カタログアイコン）をクリック
 # MAGIC 2. **workspace** カタログを展開
 # MAGIC 3. **de_handson_<あなたの名前>** スキーマを展開
@@ -189,9 +189,9 @@ display(spark.table("gold_daily_trips"))
 # MAGIC    - `bronze_trips`
 # MAGIC    - `silver_trips`
 # MAGIC    - `gold_daily_trips`
-# MAGIC 
+# MAGIC
 # MAGIC ### カタログエクスプローラでできること
-# MAGIC 
+# MAGIC
 # MAGIC - **Sample Data**: データのプレビュー
 # MAGIC - **Details**: テーブルのメタデータ（作成日時、所有者など）
 # MAGIC - **Schema**: カラム定義の確認
@@ -212,29 +212,29 @@ print(f"   - gold_daily_trips")
 
 # MAGIC %md
 # MAGIC ## 6. まとめ
-# MAGIC 
+# MAGIC
 # MAGIC ### 作成したテーブル
-# MAGIC 
+# MAGIC
 # MAGIC | レイヤー | テーブル名 | 内容 |
 # MAGIC |---------|-----------|------|
 # MAGIC | Bronze | bronze_trips | 生データ（そのまま取り込み） |
 # MAGIC | Silver | silver_trips | クレンジング済みデータ |
 # MAGIC | Gold | gold_daily_trips | 日別集計データ |
-# MAGIC 
+# MAGIC
 # MAGIC ### 命令型アプローチの特徴
-# MAGIC 
+# MAGIC
 # MAGIC ✅ **メリット**
 # MAGIC - 処理の流れが明確
 # MAGIC - デバッグしやすい
 # MAGIC - 柔軟な制御が可能
-# MAGIC 
+# MAGIC
 # MAGIC ❌ **課題**
 # MAGIC - コード量が多い
 # MAGIC - 差分処理は自分で実装が必要
 # MAGIC - 依存関係の管理が手動
 # MAGIC - データ品質チェックも自前実装
-# MAGIC 
+# MAGIC
 # MAGIC ---
-# MAGIC 
+# MAGIC
 # MAGIC 次の演習では、同じ処理を **SQL だけ** で、より簡潔に実装します。
-
+# MAGIC
