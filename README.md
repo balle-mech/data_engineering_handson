@@ -7,7 +7,7 @@ data_engineering_course/
 ├── README.md                         # このリポジトリ説明ファイル
 ├── notebooks/                        # ノートブック編で使用
 │   ├── ハンズオン要件定義_設計ガイド.md  # ノートブックハンズオンガイドです。
-│   ├──   # 演習1: 命令型ETL (PySpark)
+│   ├── # 各データ取り込み・加工ハンズオンノートブック
 │   └── example_answer/              # 正解例・サンプルコード
 │
 └── declarative_pipelines/ # 宣言型パイプライン編で使用
