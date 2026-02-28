@@ -175,19 +175,30 @@ FROM bronze_trips;
 
 ## トラブルシューティング
 
-### パイプラインが見つからない
-
-- カタログ / スキーマ の設定を確認してください
-
 ### テーブルが作成されない
 
 - パイプラインが正常に完了しているか確認（緑色のチェックマーク）
 - エラーメッセージがあれば内容を確認
 
-### エクスペクテーションが表示されない
+### CSVファイルの値が文字化け
 
-- パイプラインを再実行してください
-- テーブル指標タブを確認してください
+VSCodeで開いたとき、日本語が文字化けしてしまうことがあります。
+
+```csv
+event_time,event_type,event_name,action_name,user,request_params,resource_name,source_ip
+2026-02-02T21:08:36,access,table_access,getTable,"{""email"": ""user00@example.com"", ""name"": ""���X�� ��""}","{""full_name_arg"": ""dev.sales.table_016""}",dev.sales.table_016,10.6.121.14
+2026-02-02T23:56:39,access,table_access,getTable,"{""email"": ""user00@example.com"", ""name"": ""���X�� ��""}","{""full_name_arg"": ""prod.sales.table_019""}",prod.sales.table_019,10.4.222.123
+```
+
+（userカラムのname部分）
+
+文字コードがUTF-8（）で表示されていることが原因であれば、以下手順でShisft JIS（日本語）に変更することで解消するかもしれません。
+**注意：**既に文字化けした状態で保存までされている場合は、この操作では解消できないです。
+
+画面下の「UTF-8」をクリック、「エンコード付きで保存を選択」
+![エンコード付きで保存](./img/エンコード付きで保存.png)
+
+![Japaneseで保存](./img/Japaneseで保存.png)
 
 ---
 
