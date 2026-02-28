@@ -10,7 +10,7 @@ from typing import Dict, List, Tuple
 @dataclass
 class GenerateConfig:
     seed: int = 42
-    num_users: int = 20
+    users_per_department: int = 8
     num_tables: int = 30
     days: int = 7
     window_minutes: int = 60
@@ -45,9 +45,8 @@ USAGE_DIRTY_CSV = OUT_DIR / "usage_dirty.csv"
 USER_LIST_CSV = OUT_DIR / "user_list.csv"
 
 AUDIT_COLUMNS = [
+    "event_id",
     "event_time",
-    "event_type",
-    "event_name",
     "action_name",
     "user",
     "request_params",
@@ -56,6 +55,7 @@ AUDIT_COLUMNS = [
 ]
 
 USAGE_COLUMNS = [
+    "record_id",
     "usage_start_time",
     "usage_end_time",
     "usage_quantity",
@@ -65,6 +65,18 @@ USAGE_COLUMNS = [
 ]
 
 USER_LIST_COLUMNS = ["email", "last_name", "first_name", "department_1", "department_2"]
+
+DEPARTMENT_1_LIST = ["営業部", "システムエンジニア部", "経理部", "購買部", "人事部", "法務部", "マーケティング部"]
+DEPARTMENT_2_LIST = ["第一課", "第二課", "第三課"]
+WORKSPACE_ID_BY_DEPARTMENT = {
+    "営業部": 101001,
+    "システムエンジニア部": 101002,
+    "経理部": 101003,
+    "購買部": 101004,
+    "人事部": 101005,
+    "法務部": 101006,
+    "マーケティング部": 101007,
+}
 
 
 def iso(ts: datetime) -> str:
@@ -85,7 +97,7 @@ def random_ip(rng: random.Random) -> str:
     return f"10.{rng.randint(0,255)}.{rng.randint(0,255)}.{rng.randint(1,254)}"
 
 
-def make_users(n: int, rng: random.Random) -> List[Dict[str, str]]:
+def make_users(users_per_department: int, rng: random.Random) -> List[Dict[str, str]]:
     # Generate Japanese display names for audit/user JSON.
     last_names = [
         "佐藤", "鈴木", "高橋", "田中", "伊藤", "渡辺", "山本", "中村", "小林", "加藤",
@@ -95,23 +107,24 @@ def make_users(n: int, rng: random.Random) -> List[Dict[str, str]]:
         "太郎", "花子", "健", "美咲", "大輔", "結衣", "翔", "優子", "直樹", "彩",
         "悠斗", "真由", "蓮", "沙織", "悠真", "愛", "颯太", "杏奈", "拓也", "美優",
     ]
-    department_1_list = ["営業部", "システムエンジニア部", "経理部", "購買部", "人事部", "法務部", "マーケティング部"]
-    department_2_list = ["第一課", "第二課", "第三課"]
-
     users: List[Dict[str, str]] = []
-    for i in range(n):
-        first_name = rng.choice(first_names)
-        last_name = rng.choice(last_names)
-        users.append(
-            {
-                "email": f"user{i:02d}@example.com",
-                "name": f"{last_name} {first_name}",
-                "first_name": first_name,
-                "last_name": last_name,
-                "department_1": rng.choice(department_1_list),
-                "department_2": rng.choice(department_2_list),
-            }
-        )
+    email_seq = 0
+    for department_1 in DEPARTMENT_1_LIST:
+        for _ in range(users_per_department):
+            # 部署が違えば同姓同名を許容するため、名前重複は許容してランダム採番する。
+            first_name = rng.choice(first_names)
+            last_name = rng.choice(last_names)
+            users.append(
+                {
+                    "email": f"user{email_seq:03d}@example.com",
+                    "name": f"{last_name} {first_name}",
+                    "first_name": first_name,
+                    "last_name": last_name,
+                    "department_1": department_1,
+                    "department_2": rng.choice(DEPARTMENT_2_LIST),
+                }
+            )
+            email_seq += 1
     return users
 
 
@@ -144,6 +157,7 @@ def generate_usage_rows(
     rng: random.Random,
 ) -> List[Dict[str, object]]:
     rows: List[Dict[str, object]] = []
+    record_seq = 1
     for user in users:
         for w_start, w_end in windows:
             dbu = rng.uniform(*cfg.base_dbu_range)
@@ -155,14 +169,16 @@ def generate_usage_rows(
             identity_metadata = {"run_as": {"email": user["email"]}, "actor_type": "user"}
             rows.append(
                 {
+                    "record_id": f"rec_{record_seq:08d}",
                     "usage_start_time": iso(w_start),
                     "usage_end_time": iso(w_end),
                     "usage_quantity": round(dbu, 4),
                     "sku": "ALL_PURPOSE",
-                    "workspace_id": 123456789,
+                    "workspace_id": WORKSPACE_ID_BY_DEPARTMENT[user["department_1"]],
                     "identity_metadata": json.dumps(identity_metadata, ensure_ascii=False),
                 }
             )
+            record_seq += 1
     return rows
 
 
@@ -175,6 +191,7 @@ def generate_audit_rows(
     start_date_jst: datetime,
 ) -> List[Dict[str, object]]:
     rows: List[Dict[str, object]] = []
+    event_seq = 1
     days_list = [start_date_jst.date() + timedelta(days=i) for i in range(cfg.days)]
 
     for user in users:
@@ -193,9 +210,8 @@ def generate_audit_rows(
 
                 rows.append(
                     {
+                        "event_id": f"evt_{event_seq:08d}",
                         "event_time": iso(ev_time),
-                        "event_type": "access",
-                        "event_name": "table_access",
                         "action_name": action,
                         "user": user_json,
                         "request_params": request_params,
@@ -203,6 +219,7 @@ def generate_audit_rows(
                         "source_ip": random_ip(rng),
                     }
                 )
+                event_seq += 1
     return rows
 
 
@@ -443,7 +460,7 @@ def main() -> None:
 
     start_date_jst = datetime.now(JST).replace(minute=0, second=0, microsecond=0) - timedelta(days=gen_cfg.days)
 
-    users = make_users(gen_cfg.num_users, clean_rng)
+    users = make_users(gen_cfg.users_per_department, clean_rng)
     tables = make_tables(gen_cfg.num_tables, clean_rng)
     windows = build_windows(start_date_jst, gen_cfg.days, gen_cfg.window_minutes)
 
