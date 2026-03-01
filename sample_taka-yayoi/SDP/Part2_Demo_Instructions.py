@@ -1,16 +1,16 @@
 # Databricks notebook source
 # MAGIC %md
 # MAGIC # Part 2 デモ: Lakeflow SDPパイプライン作成手順
-# MAGIC 
+# MAGIC
 # MAGIC このノートブックでは、SQL版Lakeflow SDPパイプラインの作成方法と、Part 1(命令型)との違いを解説します。
 
 # COMMAND ----------
 
 # MAGIC %md
 # MAGIC ## 1. パイプラインの作成手順
-# MAGIC 
+# MAGIC
 # MAGIC ### Step 1: パイプラインを作成
-# MAGIC 
+# MAGIC
 # MAGIC 1. 左サイドバーの **データエンジニアリング** をクリック
 # MAGIC 2. **パイプライン** タブを選択
 # MAGIC 3. **パイプラインを作成** をクリック
@@ -20,9 +20,9 @@
 # MAGIC    - **送信先**:
 # MAGIC      - カタログ: `workspace`
 # MAGIC      - ターゲットスキーマ: `part2_demo`(新規作成される)
-# MAGIC 
+# MAGIC
 # MAGIC ### Step 2: パイプラインを実行
-# MAGIC 
+# MAGIC
 # MAGIC 1. **開始** ボタンをクリック
 # MAGIC 2. DAG(依存関係グラフ)が自動生成されることを確認
 # MAGIC 3. 各テーブルの処理状況を確認
@@ -31,7 +31,7 @@
 
 # MAGIC %md
 # MAGIC ## 2. SQL版SDPの構文
-# MAGIC 
+# MAGIC
 # MAGIC ### テーブル定義
 # MAGIC ```sql
 # MAGIC CREATE OR REFRESH MATERIALIZED VIEW テーブル名
@@ -39,7 +39,7 @@
 # MAGIC AS
 # MAGIC SELECT ... FROM ...;
 # MAGIC ```
-# MAGIC 
+# MAGIC
 # MAGIC ### データ品質制約 (Expectations)
 # MAGIC ```sql
 # MAGIC CREATE OR REFRESH MATERIALIZED VIEW テーブル名 (
@@ -48,7 +48,7 @@
 # MAGIC AS
 # MAGIC SELECT ...;
 # MAGIC ```
-# MAGIC 
+# MAGIC
 # MAGIC ### 違反時のアクション
 # MAGIC | アクション | 説明 |
 # MAGIC |-----------|------|
@@ -60,7 +60,7 @@
 
 # MAGIC %md
 # MAGIC ## 3. 命令型との比較
-# MAGIC 
+# MAGIC
 # MAGIC | 項目 | 命令型(Part 1) | 宣言型SDP(Part 2) |
 # MAGIC |------|----------------|-------------------|
 # MAGIC | 言語 | PySpark | SQL |
@@ -75,9 +75,9 @@
 
 # MAGIC %md
 # MAGIC ## 4. Expectations(データ品質)の確認
-# MAGIC 
+# MAGIC
 # MAGIC パイプライン実行後、UIで以下を確認できます：
-# MAGIC 
+# MAGIC
 # MAGIC 1. パイプライン画面で対象テーブルをクリック
 # MAGIC 2. **データ品質** タブを選択
 # MAGIC 3. 確認できる情報：
@@ -89,14 +89,14 @@
 
 # MAGIC %md
 # MAGIC ## 5. 作成されたテーブルの確認
-# MAGIC 
+# MAGIC
 # MAGIC パイプライン実行後、以下のテーブルが作成されます。
-# MAGIC 
+# MAGIC
 # MAGIC **カタログエクスプローラーで確認:**
 # MAGIC 1. 左サイドバーの **カタログ** をクリック
 # MAGIC 2. `workspace` → `part2_demo` を展開
 # MAGIC 3. 各テーブルをクリックしてデータを確認
-# MAGIC 
+# MAGIC
 # MAGIC **ノートブックから確認(以下のセルを実行):**
 
 # COMMAND ----------
@@ -116,9 +116,9 @@
 
 # MAGIC %md
 # MAGIC ## 6. Part 1との件数比較
-# MAGIC 
+# MAGIC
 # MAGIC Part 1で作成したテーブルと比較してみましょう。
-# MAGIC 
+# MAGIC
 # MAGIC - Bronze: 同じ件数(全データ取り込み)
 # MAGIC - Silver: SDPの方が少ない(Expectationsで不正データを除外)
 
@@ -137,23 +137,23 @@
 
 # MAGIC %md
 # MAGIC ## まとめ
-# MAGIC 
+# MAGIC
 # MAGIC ### 宣言型パイプライン(SDP)の利点
-# MAGIC 
+# MAGIC
 # MAGIC 1. **コードがシンプル** - 「何が欲しいか」だけ書く
 # MAGIC 2. **依存関係の自動解決** - DAGが自動生成される
 # MAGIC 3. **データ品質管理** - Expectationsで品質チェック
 # MAGIC 4. **インクリメンタル処理** - 差分のみ自動処理
 # MAGIC 5. **エラー処理** - 自動リトライ、ロールバック
-# MAGIC 
+# MAGIC
 # MAGIC ### いつ宣言型を使うか
-# MAGIC 
+# MAGIC
 # MAGIC - 定型的なETLパイプライン
 # MAGIC - データ品質管理が重要な場合
 # MAGIC - 運用の自動化が必要な場合
-# MAGIC 
+# MAGIC
 # MAGIC ### いつ命令型を使うか
-# MAGIC 
+# MAGIC
 # MAGIC - 複雑なビジネスロジック
 # MAGIC - 細かい制御が必要な場合
 # MAGIC - 探索的なデータ分析
