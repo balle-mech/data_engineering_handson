@@ -32,21 +32,42 @@
 4. 余力があれば）サマリテーブル作成
 5. 余力があれば）user_list作成し、Goldテーブルに取り込み
 
-## GitHubからハンズオンコードを教育環境に持ってくる
+## フォルダ説明
 
-![GitHubコピー](./img/GitHubコピー.png)
+ハンズオン（Notebook編）では、notebooksフォルダ配下のファイルを使用します。  
+
+```
+notebooks/
+├── ハンズオンガイド(Notebook編).md   # 本資料です
+├── XX_create_XXX                  # 各データ取り込み・加工ハンズオンノートブック
+├── example_answer/                # 正解例・サンプルコード
+│   ├── audit 
+│   └── usage
+└── img/                           # 解説用の画像ファイル
+```
+
+参照：[README.md - フォルダ構造](https://github.com/balle-mech/data_engineering_handson/blob/main/README.md#%E3%83%95%E3%82%A9%E3%83%AB%E3%83%80%E6%A7%8B%E9%80%A0)
+
+## ハンズオン準備手順
+
+### GitHubからハンズオンコードを教育環境に持ってくる
+
+以下リンクをコピー
+https://github.com/balle-mech/data_engineering_handson.git
 
 ![Gitフォルダ作成](./img/Gitフォルダ作成.png)
 
+コピーしたリンクを貼り付け
+
 ![Gitフォルダ作成2](./img/Gitフォルダ作成2.png)
 
-## CSVファイルを取り込み
+### CSVファイルを取り込み
 
-1. `config.ipynb`でカタログ・スキーマ名などを設定
-2. `setup.ipynb`でスキーマ・ボリュームを作成
-3. CSVファイルを各ディレクトリに格納
+1. `変数設定.ipynb`でカタログ・スキーマ名などを設定
+2. `スキーマ・ボリューム作成.ipynb`でスキーマ・ボリュームを作成
+3. CSVファイルを各フォルダに格納
 
-**文字化けしてしまった場合**
+**トラブルシューティング）文字化けしてしまった場合**
 
 VSCodeで開いたとき、日本語が文字化けしてしまうことがあります。
 
@@ -89,7 +110,7 @@ event_time,event_type,event_name,action_name,user,request_params,resource_name,s
   - `usage_start_time` TIMESTAMP
   - `usage_end_time` TIMESTAMP
   - `usage_quantity` DOUBLE
-  - `workspace_id` LONG
+  - `workspace_id` STRING
   - `user_email` STRING（`identity_metadata` JSON展開）
   - `_ingest_timestamp` TIMESTAMP
 

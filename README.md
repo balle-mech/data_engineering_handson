@@ -10,9 +10,11 @@ data_engineering_course/
 │   ├── # 各データ取り込み・加工ハンズオンノートブック
 │   └── example_answer/                # 正解例・サンプルコード
 │
-└── declarative_pipelines/ # 宣言型パイプライン編で使用
-    ├── xxx.sql            # 作成中
-    └── xxx.sql            # 作成中
+├── declarative_pipelines/ # 宣言型パイプライン編で使用
+│   ├── xxx.sql            # 作成中
+│   └── xxx.sql            # 作成中
+├── sample_csv/            # ダミーCSVファイル、生成プログラム
+└── sample_taka-yayoi/     # 本リポジトリフォーク元にあった、taka-yayoiさんのサンプルコードです。
 ```
 
 ---
