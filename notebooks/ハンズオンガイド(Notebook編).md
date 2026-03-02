@@ -53,7 +53,8 @@ notebooks/
 ### GitHubからハンズオンコードを教育環境に持ってくる
 
 以下リンクをコピー
-https://github.com/balle-mech/data_engineering_handson.git
+
+> https://github.com/balle-mech/data_engineering_handson.git
 
 ![Gitフォルダ作成](./img/Gitフォルダ作成.png)
 
