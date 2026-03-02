@@ -39,10 +39,13 @@
 ```
 notebooks/
 ├── ハンズオンガイド(Notebook編).md   # 本資料です
-├── XX_create_XXX                  # 各データ取り込み・加工ハンズオンノートブック
+├── audit/                         # このフォルダのNotebookでauditデータのハンズオンを実施いただきます。
+│   └── XX_create_silver ...
+├── usage/                         # このフォルダのNotebookでusageデータのハンズオンを実施いただきます。
+│   └── XX_create_silver ...
 ├── example_answer/                # 正解例・サンプルコード
-│   ├── audit 
-│   └── usage
+│   ├── audit/
+│   └── usage/
 └── img/                           # 解説用の画像ファイル
 ```
 
