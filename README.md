@@ -4,11 +4,11 @@
 
 ```
 data_engineering_course/
-├── README.md                         # このリポジトリ説明ファイル
-├── notebooks/                        # ノートブック編で使用
-│   ├── ハンズオン要件定義_設計ガイド.md  # ノートブックハンズオンガイドです。
+├── README.md                          # このリポジトリ全体の説明ファイル
+├── notebooks/                         # ノートブック編で使用
+│   ├── ハンズオンガイド(Notebook編).md   # こちらを参照しながら進めてください。
 │   ├── # 各データ取り込み・加工ハンズオンノートブック
-│   └── example_answer/              # 正解例・サンプルコード
+│   └── example_answer/                # 正解例・サンプルコード
 │
 └── declarative_pipelines/ # 宣言型パイプライン編で使用
     ├── xxx.sql            # 作成中
@@ -16,6 +16,16 @@ data_engineering_course/
 ```
 
 ---
+
+## データエンジニアリングハンズオンNotebook編
+
+`notebooks`フォルダ配下の`ハンズオンガイド(Notebook編).md`をご参照ください。
+
+## データエンジニアリングハンズオン SDP編
+
+準備中です。
+
+# SDP参考
 
 ## 演習2: Lakeflow SDP 宣言型パイプライン（25分）
 
