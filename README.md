@@ -3,7 +3,7 @@
 ## フォルダ構造
 
 ```
-data_engineering_course/
+data_engineering_handson/
 ├── README.md                          # このリポジトリ全体の説明ファイル
 ├── notebooks/                         # ノートブック編で使用
 │   ├── ハンズオンガイド(Notebook編).md   # こちらを参照しながら進めてください。
@@ -23,9 +23,9 @@ data_engineering_course/
 
 `notebooks`フォルダ配下の`ハンズオンガイド(Notebook編).md`をご参照ください。
 
-## データエンジニアリングハンズオン SDP編
+## データエンジニアリングハンズオン(Spark Declarative Pipelines編)
 
-準備中です。
+https://github.com/balle-mech/data-engineering-handson-sdp.git
 
 # SDP参考
 
