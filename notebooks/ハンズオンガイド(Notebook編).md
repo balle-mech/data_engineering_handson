@@ -130,28 +130,27 @@ event_time,event_type,event_name,action_name,user,request_params,resource_name,s
 
 ## Silverで実装したい加工要件
 
-### JSON展開
+### audit
 
-- audit:
+- JSON展開
   - `user` から `user_email`, `user_name`
-  - `request_params` から `full_name_arg`
-- usage:
-  - `identity_metadata` から `user_email`
-
-### explode（必要に応じて別テーブル化）
-
-- `resource_name` または `full_name_arg` を `.` 分割し、`catalog/schema/table` 単位に展開
-- 1イベント1行を保ちたい場合、explode結果は別Silverサブテーブルに保存
-
-### データ品質補正
-
 - null除去:
-  - audit: `event_time`, `action_name`, `user_email` がnullの行を除外
-  - usage: `usage_start_time`, `usage_end_time`, `usage_quantity`, `user_email` がnull/空の行を除外
-- 先頭空白除去:
-  - `ltrim` を `action_name`, `resource_name`, `user_email` へ適用
+  - `event_time`, `action_name`, `email` がnullの行を除外
+- 値前後の空白除去:
+  - `trim` を `action_name`, `resource_name`, `email` へ適用
 - 重複除去:
-  - 基本は `event_id` / `record_id` 単位で重複排除
+  - `event_id` を一意にして重複排除
+
+### usage:
+
+- JSON展開
+  - `identity_metadata` から `user_email`
+- null除去:
+  - `usage_start_time`, `usage_end_time`, `usage_quantity`, `email` がnull/空の行を除外
+- 値前後の空白除去:
+  - `trim` を `email` へ適用
+- 重複除去:
+  - `record_id` を一意にして重複排除
 
 ## Gold 設計イメージ
 
